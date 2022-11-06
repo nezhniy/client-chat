@@ -15,15 +15,29 @@ public class SocketRunnable implements Runnable{
         try {
             serverReader = new MessageInputServiceImpl(socket.getInputStream());
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        while (true){
             try {
-                System.out.println(serverReader.getMessage());
-            } catch (IOException e) {
-                e.printStackTrace();
+                socket.close();
+            } catch (IOException ex) {
+                throw new NullPointerException();
             }
         }
+
+        while (true) {
+            try {
+                if (serverReader.getMessage().equals("exit")) {
+                    break;
+                } else {
+                    System.out.println(serverReader.getMessage());
+                }
+            } catch (IOException e) {
+                throw new NullPointerException();
+            }
+        }
+        try{
+            socket.close();
+        } catch (IOException e){
+            System.out.println("Socket not closed");
+        }
+
     }
 }
