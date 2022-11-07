@@ -21,16 +21,18 @@ public class SocketRunnable implements Runnable{
                 throw new NullPointerException();
             }
         }
+        String messageFromClient = null;
+        try {
+            messageFromClient = serverReader.getMessage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         while (true) {
-            try {
-                if (serverReader.getMessage().equals("exit")) {
-                    break;
-                } else {
-                    System.out.println(serverReader.getMessage());
-                }
-            } catch (IOException e) {
-                throw new NullPointerException();
+            if ((messageFromClient == null) || messageFromClient.equals("exit")) {
+                break;
+            } else {
+                System.out.println(messageFromClient);
             }
         }
         try{
@@ -38,6 +40,7 @@ public class SocketRunnable implements Runnable{
         } catch (IOException e){
             System.out.println("Socket not closed");
         }
+        System.exit(0);
 
     }
 }
